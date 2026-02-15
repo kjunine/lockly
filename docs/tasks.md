@@ -68,7 +68,7 @@
 
 ### [TASK-002] 의존성 설치 및 빌드 도구 구성
 
-**Status**: `pending`
+**Status**: `completed`
 
 **Context**:
 - TRD: 섹션 6 Stack Options
@@ -83,17 +83,17 @@
 **API/DB changes**: 없음
 
 **Acceptance Criteria**:
-- [ ] 런타임 의존성 설치: `commander`
-- [ ] 개발 의존성 설치: `typescript`, `tsup`, `vitest`, `eslint`, `prettier`, `@types/node`
-- [ ] `tsup.config.ts`가 CJS/ESM 듀얼 출력으로 구성되어 있다 (NFR-7)
-- [ ] `vitest.config.ts`가 생성되어 있다
-- [ ] `npm install` 실행 시 에러 없이 완료된다
-- [ ] `package-lock.json`이 생성되어 있다
+- [x] 런타임 의존성 설치: `commander`
+- [x] 개발 의존성 설치: `typescript`, `tsup`, `vitest`, `eslint`, `prettier`, `@types/node`
+- [x] `tsup.config.ts`가 CJS/ESM 듀얼 출력으로 구성되어 있다 (NFR-7)
+- [x] `vitest.config.ts`가 생성되어 있다
+- [x] `npm install` 실행 시 에러 없이 완료된다
+- [x] `package-lock.json`이 생성되어 있다
 
 **Self-review checklist**:
-- [ ] 모든 의존성 버전이 `package-lock.json`에 고정되어 있는가
-- [ ] `tsup.config.ts`에서 `entry`, `format`, `dts` 등이 올바르게 설정되어 있는가
-- [ ] 불필요한 의존성이 포함되지 않았는가
+- [x] 모든 의존성 버전이 `package-lock.json`에 고정되어 있는가
+- [x] `tsup.config.ts`에서 `entry`, `format`, `dts` 등이 올바르게 설정되어 있는가
+- [x] 불필요한 의존성이 포함되지 않았는가
 
 ---
 
