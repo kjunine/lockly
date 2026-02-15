@@ -3,3 +3,4 @@
  */
 
 export type { GenerateOptions } from './generator.js';
+export { generatePassword } from './generator.js';

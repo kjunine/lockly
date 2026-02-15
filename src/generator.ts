@@ -3,6 +3,8 @@
  * Uses node:crypto for cryptographically secure random generation
  */
 
+import { getRandomValues } from 'node:crypto';
+
 /**
  * Options for password generation
  */
@@ -63,3 +65,103 @@ export const NUMBERS = '0123456789';
  * Special character set
  */
 export const SYMBOLS = '!@#$%^&*()_+-=[]{}|;:,.<>?';
+
+/**
+ * Build a character pool string from the given options.
+ *
+ * Concatenates the character sets that are enabled in the options.
+ *
+ * @param options - Generation options with charset toggles
+ * @returns The concatenated character pool string
+ */
+function buildPool(options: Required<GenerateOptions>): string {
+  let pool = '';
+  if (options.uppercase) pool += UPPERCASE;
+  if (options.lowercase) pool += LOWERCASE;
+  if (options.numbers) pool += NUMBERS;
+  if (options.symbols) pool += SYMBOLS;
+  return pool;
+}
+
+/**
+ * Generate a single password of the given length from the character pool.
+ *
+ * Uses `crypto.getRandomValues()` for cryptographically secure randomness (REQ-1).
+ * Applies rejection sampling to eliminate modulo bias: any random byte whose
+ * value is >= `limit` (the largest multiple of `poolLength` that fits in a byte)
+ * is discarded and re-sampled.
+ *
+ * @param length - Desired password length
+ * @param pool - Character pool to sample from
+ * @returns A single password string
+ */
+function generateSingle(length: number, pool: string): string {
+  const poolLength = pool.length;
+
+  // Calculate the rejection threshold to eliminate modulo bias.
+  // `limit` is the largest multiple of poolLength that is <= 256.
+  // Any random byte value >= limit is biased and must be discarded.
+  const limit = 256 - (256 % poolLength);
+
+  const chars: string[] = [];
+
+  while (chars.length < length) {
+    // Request enough random bytes to likely fill the remaining characters,
+    // with extra to account for rejections.
+    const remaining = length - chars.length;
+    const bufferSize = remaining * 2;
+    const randomBytes = new Uint8Array(bufferSize);
+    getRandomValues(randomBytes);
+
+    for (let i = 0; i < randomBytes.length && chars.length < length; i++) {
+      const byte = randomBytes[i];
+      // Reject bytes that would cause modulo bias
+      if (byte < limit) {
+        chars.push(pool[byte % poolLength]);
+      }
+    }
+  }
+
+  return chars.join('');
+}
+
+/**
+ * Generate one or more cryptographically secure random passwords.
+ *
+ * Uses `node:crypto.getRandomValues()` as the entropy source (REQ-1, NFR-1).
+ * Applies rejection sampling to avoid modulo bias when the character pool
+ * length is not a power of two.
+ *
+ * @param options - Password generation options. All fields are optional and
+ *   fall back to safe defaults (length=16, count=1, all charsets enabled).
+ * @returns An array of generated password strings. The array length equals
+ *   `options.count` (default 1).
+ *
+ * @example
+ * ```ts
+ * // Generate one 16-character password with all charsets
+ * const [pw] = generatePassword();
+ *
+ * // Generate three 32-character passwords without symbols
+ * const pws = generatePassword({ length: 32, count: 3, symbols: false });
+ * ```
+ */
+export function generatePassword(options?: GenerateOptions): string[] {
+  const resolved: Required<GenerateOptions> = {
+    length: options?.length ?? 16,
+    count: options?.count ?? 1,
+    uppercase: options?.uppercase ?? true,
+    lowercase: options?.lowercase ?? true,
+    numbers: options?.numbers ?? true,
+    symbols: options?.symbols ?? true,
+  };
+
+  const pool = buildPool(resolved);
+
+  const passwords: string[] = [];
+  for (let i = 0; i < resolved.count; i++) {
+    passwords.push(generateSingle(resolved.length, pool));
+  }
+
+  return passwords;
+}
