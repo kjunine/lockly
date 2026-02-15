@@ -220,7 +220,7 @@
 
 ### [TASK-007] 패스워드 생성 핵심 함수 구현
 
-**Status**: `pending`
+**Status**: `in-progress`
 
 **Context**:
 - PRD: FEAT-1 (기본 생성), REQ-1 (crypto 기반), REQ-4 (stdout 출력)
@@ -235,18 +235,18 @@
 **API/DB changes**: 없음
 
 **Acceptance Criteria**:
-- [ ] `generatePassword(options?: GenerateOptions): string[]` 함수가 구현되어 있다
-- [ ] `node:crypto.getRandomValues()`를 사용하여 랜덤 값을 생성한다 (REQ-1)
-- [ ] 기본값: length=16, count=1, 모든 문자셋 활성화
-- [ ] `Math.random()`이 코드 어디에도 사용되지 않는다 (RISK-1)
-- [ ] 생성된 패스워드 길이가 요청된 length와 정확히 일치한다
-- [ ] count만큼의 패스워드가 배열로 반환된다
-- [ ] `src/index.ts`에서 `generatePassword` 함수가 re-export된다
+- [x] `generatePassword(options?: GenerateOptions): string[]` 함수가 구현되어 있다
+- [x] `node:crypto.getRandomValues()`를 사용하여 랜덤 값을 생성한다 (REQ-1)
+- [x] 기본값: length=16, count=1, 모든 문자셋 활성화
+- [x] `Math.random()`이 코드 어디에도 사용되지 않는다 (RISK-1)
+- [x] 생성된 패스워드 길이가 요청된 length와 정확히 일치한다
+- [x] count만큼의 패스워드가 배열로 반환된다
+- [x] `src/index.ts`에서 `generatePassword` 함수가 re-export된다
 
 **Self-review checklist**:
-- [ ] 모듈로 바이어스(modulo bias) 문제가 처리되어 있는가 (문자셋 길이가 256의 약수가 아닌 경우)
-- [ ] 함수가 순수 함수(pure function)인가 (외부 상태 의존 없음)
-- [ ] JSDoc 주석이 작성되어 있는가
+- [x] 모듈로 바이어스(modulo bias) 문제가 처리되어 있는가 (문자셋 길이가 256의 약수가 아닌 경우)
+- [x] 함수가 순수 함수(pure function)인가 (외부 상태 의존 없음)
+- [x] JSDoc 주석이 작성되어 있는가
 
 ---
 
