@@ -194,7 +194,7 @@
 
 ### [TASK-006] 문자셋 상수 및 타입 정의
 
-**Status**: `pending`
+**Status**: `in-progress`
 
 **Context**:
 - PRD: FEAT-1 (기본 패스워드 생성), FEAT-3 (문자셋 필터링)
@@ -207,14 +207,14 @@
 **API/DB changes**: 없음
 
 **Acceptance Criteria**:
-- [ ] `GenerateOptions` 인터페이스가 정의되어 있다 (length, count, uppercase, lowercase, numbers, symbols)
-- [ ] 4개 문자셋 상수가 정의되어 있다 (UPPERCASE, LOWERCASE, NUMBERS, SYMBOLS)
-- [ ] 모든 타입에 JSDoc 주석이 작성되어 있다
-- [ ] `src/index.ts`에서 `GenerateOptions` 타입이 re-export된다
+- [x] `GenerateOptions` 인터페이스가 정의되어 있다 (length, count, uppercase, lowercase, numbers, symbols)
+- [x] 4개 문자셋 상수가 정의되어 있다 (UPPERCASE, LOWERCASE, NUMBERS, SYMBOLS)
+- [x] 모든 타입에 JSDoc 주석이 작성되어 있다
+- [x] `src/index.ts`에서 `GenerateOptions` 타입이 re-export된다
 
 **Self-review checklist**:
-- [ ] 특수문자 셋에 셸 해석 시 문제가 될 수 있는 문자가 올바르게 포함되어 있는가
-- [ ] named export를 사용하고 있는가 (TRD Coding Convention)
+- [x] 특수문자 셋에 셸 해석 시 문제가 될 수 있는 문자가 올바르게 포함되어 있는가
+- [x] named export를 사용하고 있는가 (TRD Coding Convention)
 
 ---
 
