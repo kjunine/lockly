@@ -131,7 +131,7 @@
 
 ### [TASK-004] 테스트 프레임워크 구성 및 샘플 테스트
 
-**Status**: `pending`
+**Status**: `completed`
 
 **Context**:
 - TRD: 섹션 6.4 테스트 (vitest 선택)
@@ -146,15 +146,15 @@
 **API/DB changes**: 없음
 
 **Acceptance Criteria**:
-- [ ] `vitest.config.ts`에 coverage 설정이 포함되어 있다
-- [ ] `tests/generator.test.ts`에 최소 1개의 샘플 테스트가 작성되어 있다
-- [ ] `package.json`의 `scripts`에 `test`, `test:coverage` 명령이 등록되어 있다
-- [ ] `npm test` 실행 시 샘플 테스트가 통과한다
+- [x] `vitest.config.ts`에 coverage 설정이 포함되어 있다
+- [x] `tests/generator.test.ts`에 최소 1개의 샘플 테스트가 작성되어 있다
+- [x] `package.json`의 `scripts`에 `test`, `test:coverage` 명령이 등록되어 있다
+- [x] `npm test` 실행 시 샘플 테스트가 통과한다
 
 **Self-review checklist**:
-- [ ] vitest 버전이 `package-lock.json`에 고정되어 있는가
-- [ ] coverage 리포터가 적절하게 설정되어 있는가 (예: text, lcov)
-- [ ] CI에서도 동일한 `npm test` 명령이 동작하도록 구성되어 있는가
+- [x] vitest 버전이 `package-lock.json`에 고정되어 있는가
+- [x] coverage 리포터가 적절하게 설정되어 있는가 (예: text, lcov)
+- [x] CI에서도 동일한 `npm test` 명령이 동작하도록 구성되어 있는가
 
 ---
 
@@ -487,7 +487,7 @@
 | M0 | TASK-001 | 레포 초기화 및 디렉토리 구조 생성 | - | `completed` |
 | M0 | TASK-002 | 의존성 설치 및 빌드 도구 구성 | NFR-7 | `pending` |
 | M0 | TASK-003 | 코드 품질 도구 구성 (ESLint + Prettier) | RISK-1 | `pending` |
-| M0 | TASK-004 | 테스트 프레임워크 구성 및 샘플 테스트 | NFR-5 | `pending` |
+| M0 | TASK-004 | 테스트 프레임워크 구성 및 샘플 테스트 | NFR-5 | `completed` |
 | M0 | TASK-005 | 통합 스크립트 등록 및 환경 검증 | - | `pending` |
 | M1 | TASK-006 | 문자셋 상수 및 타입 정의 | FEAT-1, FEAT-3 | `pending` |
 | M1 | TASK-007 | 패스워드 생성 핵심 함수 구현 | FEAT-1, REQ-1, RISK-1 | `pending` |
