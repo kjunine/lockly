@@ -449,7 +449,7 @@
 
 ### [TASK-014] npm publish 준비 및 최종 검증
 
-**Status**: `pending`
+**Status**: `in-progress`
 
 **Context**:
 - PRD: Release Scope (M3)
@@ -463,20 +463,20 @@
 **API/DB changes**: 없음
 
 **Acceptance Criteria**:
-- [ ] `npm run lint` 통과 (위반 0건)
-- [ ] `npm run format:check` 통과 (변경 없음)
-- [ ] `npm test` 통과 (전체 테스트 통과)
-- [ ] `npm run build` 성공
-- [ ] `npm pack`으로 생성되는 tarball에 불필요한 파일이 포함되지 않는다
-- [ ] `package.json`의 `name`, `version`, `description`, `keywords`, `repository` 필드가 설정되어 있다
-- [ ] Node.js 18 환경에서 정상 동작 확인 (NFR-3)
-- [ ] 응답 시간이 50ms 이내인지 간단한 벤치마크로 확인 (NFR-2)
+- [x] `npm run lint` 통과 (위반 0건)
+- [x] `npm run format:check` 통과 (변경 없음)
+- [x] `npm test` 통과 (전체 테스트 통과)
+- [x] `npm run build` 성공
+- [x] `npm pack`으로 생성되는 tarball에 불필요한 파일이 포함되지 않는다
+- [x] `package.json`의 `name`, `version`, `description`, `keywords`, `repository` 필드가 설정되어 있다
+- [x] Node.js 18 환경에서 정상 동작 확인 (NFR-3)
+- [x] 응답 시간이 50ms 이내인지 간단한 벤치마크로 확인 (NFR-2)
 
 **Self-review checklist**:
-- [ ] `npm whoami`로 npm 로그인 상태가 확인되는가
-- [ ] 패키지명 `randpw`가 npm 레지스트리에서 사용 가능한가
-- [ ] `npm publish --dry-run`으로 사전 검증을 했는가
-- [ ] 시맨틱 버저닝 (0.1.0) 이 적절한가
+- [ ] `npm whoami`로 npm 로그인 상태가 확인되는가 — **미확인** (npm 로그인 불가)
+- [ ] 패키지명 `randpw`가 npm 레지스트리에서 사용 가능한가 — **불가** (이미 존재: randpw@2.0.1)
+- [x] `npm publish --dry-run`으로 사전 검증을 했는가 — `npm pack --dry-run`으로 대체 검증 완료
+- [x] 시맨틱 버저닝 (0.1.0) 이 적절한가
 
 ---
 
