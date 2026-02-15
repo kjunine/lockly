@@ -160,7 +160,7 @@
 
 ### [TASK-005] 통합 스크립트 등록 및 환경 검증
 
-**Status**: `pending`
+**Status**: `completed`
 
 **Context**:
 - Milestone 0 완료 조건
@@ -172,17 +172,17 @@
 **API/DB changes**: 없음
 
 **Acceptance Criteria**:
-- [ ] `package.json`에 `build`, `lint`, `format`, `format:check`, `test`, `test:coverage` 스크립트가 모두 등록되어 있다
-- [ ] `npm run build` 실행 시 `dist/` 디렉토리에 CJS/ESM 출력물이 생성된다
-- [ ] `npm run lint` 실행 시 위반 0건이다
-- [ ] `npm run format:check` 실행 시 변경 없음이다
-- [ ] `npm test` 실행 시 모든 테스트가 통과한다
-- [ ] 정의된 디렉토리 구조(`src/`, `tests/`, `dist/`)가 모두 존재한다
+- [x] `package.json`에 `build`, `lint`, `format`, `format:check`, `test`, `test:coverage` 스크립트가 모두 등록되어 있다
+- [x] `npm run build` 실행 시 `dist/` 디렉토리에 CJS/ESM 출력물이 생성된다
+- [x] `npm run lint` 실행 시 위반 0건이다
+- [x] `npm run format:check` 실행 시 변경 없음이다
+- [x] `npm test` 실행 시 모든 테스트가 통과한다
+- [x] 정의된 디렉토리 구조(`src/`, `tests/`, `dist/`)가 모두 존재한다
 
 **Self-review checklist**:
-- [ ] lint/format/test 각 도구 버전이 락파일에 고정되어 있는가
-- [ ] 불필요한 기본 규칙이 포함되지 않았는가 (TRD Coding Convention과 일치하는가)
-- [ ] CI에서도 동일 명령이 동작하도록 스크립트가 구성되어 있는가
+- [x] lint/format/test 각 도구 버전이 락파일에 고정되어 있는가
+- [x] 불필요한 기본 규칙이 포함되지 않았는가 (TRD Coding Convention과 일치하는가)
+- [x] CI에서도 동일 명령이 동작하도록 스크립트가 구성되어 있는가
 
 ---
 
