@@ -391,7 +391,7 @@
 
 ### [TASK-012] 빌드 검증 및 패키지 구성 완료
 
-**Status**: `pending`
+**Status**: `in-progress`
 
 **Context**:
 - TRD: 섹션 6.3 빌드 도구 (tsup), NFR-7 (CJS/ESM 듀얼)
@@ -404,17 +404,17 @@
 **API/DB changes**: 없음
 
 **Acceptance Criteria**:
-- [ ] `npm run build` 실행 시 에러 없이 `dist/` 에 출력물이 생성된다
-- [ ] CJS(`dist/index.cjs`) 와 ESM(`dist/index.mjs` 또는 `dist/index.js`) 출력물이 모두 존재한다 (NFR-7)
-- [ ] TypeScript 선언 파일(`dist/index.d.ts`)이 생성된다
-- [ ] CLI 엔트리포인트(`dist/cli.js` 또는 `dist/cli.cjs`)가 생성된다
-- [ ] `package.json`의 `main`, `module`, `types`, `exports`, `bin`, `files` 필드가 올바르게 설정되어 있다
-- [ ] `npx .` 또는 `node dist/cli.js`로 로컬 실행이 가능하다
+- [x] `npm run build` 실행 시 에러 없이 `dist/` 에 출력물이 생성된다
+- [x] CJS(`dist/index.cjs`) 와 ESM(`dist/index.mjs` 또는 `dist/index.js`) 출력물이 모두 존재한다 (NFR-7)
+- [x] TypeScript 선언 파일(`dist/index.d.ts`)이 생성된다
+- [x] CLI 엔트리포인트(`dist/cli.js` 또는 `dist/cli.cjs`)가 생성된다
+- [x] `package.json`의 `main`, `module`, `types`, `exports`, `bin`, `files` 필드가 올바르게 설정되어 있다
+- [x] `npx .` 또는 `node dist/cli.js`로 로컬 실행이 가능하다
 
 **Self-review checklist**:
-- [ ] `files` 필드에 `dist/`만 포함되어 불필요한 파일이 배포되지 않는가
-- [ ] `bin` 필드의 경로가 빌드 출력물과 일치하는가
-- [ ] CJS/ESM 양쪽에서 라이브러리 import가 정상 동작하는가
+- [x] `files` 필드에 `dist/`만 포함되어 불필요한 파일이 배포되지 않는가
+- [x] `bin` 필드의 경로가 빌드 출력물과 일치하는가
+- [x] CJS/ESM 양쪽에서 라이브러리 import가 정상 동작하는가
 
 ---
 
