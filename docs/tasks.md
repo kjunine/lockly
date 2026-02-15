@@ -318,7 +318,7 @@
 
 ### [TASK-010] CLI 엔트리포인트 구현 (commander 통합)
 
-**Status**: `pending`
+**Status**: `in-progress`
 
 **Context**:
 - PRD: FEAT-5 (도움말/버전), 전체 CLI 옵션 목록
@@ -332,21 +332,21 @@
 **API/DB changes**: 없음
 
 **Acceptance Criteria**:
-- [ ] commander를 사용하여 CLI가 구현되어 있다
-- [ ] `-l, --length <number>` 옵션이 동작한다 (FEAT-2)
-- [ ] `-c, --count <number>` 옵션이 동작한다 (FEAT-4)
-- [ ] `--no-uppercase`, `--no-lowercase`, `--no-numbers`, `--no-symbols` 옵션이 동작한다 (FEAT-3)
-- [ ] `-V, --version` 옵션이 package.json 버전을 표시한다 (FEAT-5)
-- [ ] `-h, --help` 옵션이 사용법을 표시한다 (FEAT-5)
-- [ ] 생성 결과가 stdout으로 한 줄에 하나씩 출력된다 (REQ-4)
-- [ ] 에러 시 stderr로 메시지를 출력하고 종료코드 1을 반환한다
-- [ ] 성공 시 종료코드 0을 반환한다
-- [ ] shebang(`#!/usr/bin/env node`)이 포함되어 있다
+- [x] commander를 사용하여 CLI가 구현되어 있다
+- [x] `-l, --length <number>` 옵션이 동작한다 (FEAT-2)
+- [x] `-c, --count <number>` 옵션이 동작한다 (FEAT-4)
+- [x] `--no-uppercase`, `--no-lowercase`, `--no-numbers`, `--no-symbols` 옵션이 동작한다 (FEAT-3)
+- [x] `-V, --version` 옵션이 package.json 버전을 표시한다 (FEAT-5)
+- [x] `-h, --help` 옵션이 사용법을 표시한다 (FEAT-5)
+- [x] 생성 결과가 stdout으로 한 줄에 하나씩 출력된다 (REQ-4)
+- [x] 에러 시 stderr로 메시지를 출력하고 종료코드 1을 반환한다
+- [x] 성공 시 종료코드 0을 반환한다
+- [x] shebang(`#!/usr/bin/env node`)이 포함되어 있다
 
 **Self-review checklist**:
-- [ ] commander의 옵션 파싱 결과가 GenerateOptions로 올바르게 변환되는가
-- [ ] 숫자 옵션(length, count)이 문자열이 아닌 숫자로 파싱되는가
-- [ ] stdout에 ANSI 색상 코드가 포함되지 않는가 (NFR-6)
+- [x] commander의 옵션 파싱 결과가 GenerateOptions로 올바르게 변환되는가
+- [x] 숫자 옵션(length, count)이 문자열이 아닌 숫자로 파싱되는가
+- [x] stdout에 ANSI 색상 코드가 포함되지 않는가 (NFR-6)
 
 ---
 
