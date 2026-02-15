@@ -31,7 +31,7 @@
 
 ### [TASK-001] 레포 초기화 및 디렉토리 구조 생성
 
-**Status**: `pending`
+**Status**: `completed`
 
 **Context**:
 - PRD: 프로젝트 구조 참조
@@ -49,20 +49,20 @@
 **API/DB changes**: 없음
 
 **Acceptance Criteria**:
-- [ ] `git init`으로 레포가 초기화되어 있다
-- [ ] `package.json`이 생성되어 있고, name=`randpw`, version=`0.1.0`, license=`MIT`가 설정되어 있다
-- [ ] `package.json`의 `bin` 필드에 `randpw` 엔트리가 설정되어 있다
-- [ ] `package.json`의 `engines` 필드에 `node >= 18` 이 명시되어 있다
-- [ ] `tsconfig.json`이 strict mode로 설정되어 있다
-- [ ] `src/` 디렉토리와 빈 엔트리 파일(`cli.ts`, `generator.ts`, `index.ts`)이 존재한다
-- [ ] `tests/` 디렉토리가 존재한다
-- [ ] `.gitignore`에 `node_modules/`, `dist/` 등이 포함되어 있다
-- [ ] `LICENSE` 파일이 MIT 라이선스 본문으로 생성되어 있다
+- [x] `git init`으로 레포가 초기화되어 있다
+- [x] `package.json`이 생성되어 있고, name=`randpw`, version=`0.1.0`, license=`MIT`가 설정되어 있다
+- [x] `package.json`의 `bin` 필드에 `randpw` 엔트리가 설정되어 있다
+- [x] `package.json`의 `engines` 필드에 `node >= 18` 이 명시되어 있다
+- [x] `tsconfig.json`이 strict mode로 설정되어 있다
+- [x] `src/` 디렉토리와 빈 엔트리 파일(`cli.ts`, `generator.ts`, `index.ts`)이 존재한다
+- [x] `tests/` 디렉토리가 존재한다
+- [x] `.gitignore`에 `node_modules/`, `dist/` 등이 포함되어 있다
+- [x] `LICENSE` 파일이 MIT 라이선스 본문으로 생성되어 있다
 
 **Self-review checklist**:
-- [ ] `package.json`의 `type` 필드가 올바르게 설정되어 있는가 (ESM 지원)
-- [ ] `tsconfig.json`의 target/module이 Node.js 18+에 적합한가
-- [ ] `.gitignore`에 OS 생성 파일(.DS_Store 등)이 포함되어 있는가
+- [x] `package.json`의 `type` 필드가 올바르게 설정되어 있는가 (ESM 지원)
+- [x] `tsconfig.json`의 target/module이 Node.js 18+에 적합한가
+- [x] `.gitignore`에 OS 생성 파일(.DS_Store 등)이 포함되어 있는가
 
 ---
 
@@ -484,7 +484,7 @@
 
 | 마일스톤 | 태스크 | 제목 | 관련 FEAT/REQ | Status |
 |----------|--------|------|-------------|--------|
-| M0 | TASK-001 | 레포 초기화 및 디렉토리 구조 생성 | - | `pending` |
+| M0 | TASK-001 | 레포 초기화 및 디렉토리 구조 생성 | - | `completed` |
 | M0 | TASK-002 | 의존성 설치 및 빌드 도구 구성 | NFR-7 | `pending` |
 | M0 | TASK-003 | 코드 품질 도구 구성 (ESLint + Prettier) | RISK-1 | `pending` |
 | M0 | TASK-004 | 테스트 프레임워크 구성 및 샘플 테스트 | NFR-5 | `pending` |
