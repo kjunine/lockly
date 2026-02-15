@@ -420,7 +420,7 @@
 
 ### [TASK-013] README.md 작성
 
-**Status**: `pending`
+**Status**: `in-progress`
 
 **Context**:
 - PRD: 전체 (프로젝트 소개, 사용법)
@@ -433,17 +433,17 @@
 **API/DB changes**: 없음
 
 **Acceptance Criteria**:
-- [ ] 프로젝트 설명 (한 줄 소개)이 포함되어 있다
-- [ ] 설치 방법 (`npm install -g randpw`, `npx randpw`)이 안내되어 있다
-- [ ] 사용법과 모든 CLI 옵션이 문서화되어 있다
-- [ ] 사용 예시가 3개 이상 포함되어 있다
-- [ ] 라이선스 (MIT) 표시가 있다
-- [ ] 파이프 활용 예시 (`randpw | pbcopy`)가 포함되어 있다
+- [x] 프로젝트 설명 (한 줄 소개)이 포함되어 있다
+- [x] 설치 방법 (`npm install -g randpw`, `npx randpw`)이 안내되어 있다
+- [x] 사용법과 모든 CLI 옵션이 문서화되어 있다
+- [x] 사용 예시가 3개 이상 포함되어 있다
+- [x] 라이선스 (MIT) 표시가 있다
+- [x] 파이프 활용 예시 (`randpw | pbcopy`)가 포함되어 있다
 
 **Self-review checklist**:
-- [ ] 옵션 목록이 TRD 섹션 5.1과 일치하는가
-- [ ] 예시 명령어가 실제로 동작하는가
-- [ ] README에 패스워드 예시가 포함되지 않았는가 (보안 고려)
+- [x] 옵션 목록이 TRD 섹션 5.1과 일치하는가
+- [x] 예시 명령어가 실제로 동작하는가
+- [x] README에 패스워드 예시가 포함되지 않았는가 (보안 고려)
 
 ---
 
