@@ -126,6 +126,37 @@ function generateSingle(length: number, pool: string): string {
 }
 
 /**
+ * Validate password generation options and throw descriptive errors.
+ *
+ * @param options - Resolved options to validate
+ * @throws {Error} If validation fails (invalid length, count, or charset selection)
+ */
+function validateOptions(options: Required<GenerateOptions>): void {
+  // REQ-3: Validate length range (1-1024)
+  if (!Number.isInteger(options.length) || options.length < 1) {
+    throw new Error('길이는 1~1024 사이여야 합니다');
+  }
+  if (options.length > 1024) {
+    throw new Error('길이는 1~1024 사이여야 합니다');
+  }
+
+  // REQ-5: Validate count (must be >= 1)
+  if (!Number.isInteger(options.count) || options.count < 1) {
+    throw new Error('count는 1 이상이어야 합니다');
+  }
+
+  // REQ-2: At least one charset must be enabled (RISK-2)
+  if (
+    !options.uppercase &&
+    !options.lowercase &&
+    !options.numbers &&
+    !options.symbols
+  ) {
+    throw new Error('최소 1개 이상의 문자셋을 포함해야 합니다');
+  }
+}
+
+/**
  * Generate one or more cryptographically secure random passwords.
  *
  * Uses `node:crypto.getRandomValues()` as the entropy source (REQ-1, NFR-1).
@@ -136,6 +167,7 @@ function generateSingle(length: number, pool: string): string {
  *   fall back to safe defaults (length=16, count=1, all charsets enabled).
  * @returns An array of generated password strings. The array length equals
  *   `options.count` (default 1).
+ * @throws {Error} If options validation fails (invalid length, count, or charsets)
  *
  * @example
  * ```ts
@@ -155,6 +187,9 @@ export function generatePassword(options?: GenerateOptions): string[] {
     numbers: options?.numbers ?? true,
     symbols: options?.symbols ?? true,
   };
+
+  // Validate options (REQ-2, REQ-3, REQ-5)
+  validateOptions(resolved);
 
   const pool = buildPool(resolved);
 
