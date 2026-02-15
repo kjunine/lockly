@@ -99,7 +99,7 @@
 
 ### [TASK-003] 코드 품질 도구 구성 (ESLint + Prettier)
 
-**Status**: `pending`
+**Status**: `completed`
 
 **Context**:
 - TRD: 섹션 8.3 Coding Convention

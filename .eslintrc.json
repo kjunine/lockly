@@ -1,0 +1,37 @@
+{
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2022,
+    "sourceType": "module",
+    "project": "./tsconfig.json"
+  },
+  "plugins": ["@typescript-eslint"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    "prettier"
+  ],
+  "rules": {
+    "no-restricted-globals": [
+      "error",
+      {
+        "name": "Math",
+        "message": "Math.random()은 보안상 안전하지 않습니다. node:crypto 모듈의 getRandomValues()를 사용하세요. (RISK-1)"
+      }
+    ],
+    "no-restricted-properties": [
+      "error",
+      {
+        "object": "Math",
+        "property": "random",
+        "message": "Math.random()은 암호학적으로 안전하지 않습니다. node:crypto 모듈의 getRandomValues()를 사용하세요. (RISK-1)"
+      }
+    ]
+  },
+  "env": {
+    "node": true,
+    "es2022": true
+  }
+}
