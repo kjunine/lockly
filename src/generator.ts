@@ -3,7 +3,9 @@
  * Uses node:crypto for cryptographically secure random generation
  */
 
-import { getRandomValues } from 'node:crypto';
+const getRandomValues = globalThis.crypto.getRandomValues.bind(
+  globalThis.crypto
+);
 
 /**
  * Options for password generation
