@@ -46,6 +46,13 @@ export interface GenerateOptions {
    * @default true
    */
   symbols?: boolean;
+
+  /**
+   * Ensure at least one character from each enabled charset is included.
+   * When enabled, the password length must be >= the number of active charsets.
+   * @default false
+   */
+  ensure?: boolean;
 }
 
 /**
@@ -69,20 +76,89 @@ export const NUMBERS = '0123456789';
 export const SYMBOLS = '!@#$%^&*()_+-=[]{}|;:,.<>?';
 
 /**
- * Build a character pool string from the given options.
+ * Build a character pool string and collect individual active charsets.
  *
  * Concatenates the character sets that are enabled in the options.
  *
  * @param options - Generation options with charset toggles
- * @returns The concatenated character pool string
+ * @returns An object with the concatenated pool and an array of active charset strings
  */
-function buildPool(options: Required<GenerateOptions>): string {
+function buildPool(options: Required<GenerateOptions>): {
+  pool: string;
+  charsets: string[];
+} {
   let pool = '';
-  if (options.uppercase) pool += UPPERCASE;
-  if (options.lowercase) pool += LOWERCASE;
-  if (options.numbers) pool += NUMBERS;
-  if (options.symbols) pool += SYMBOLS;
-  return pool;
+  const charsets: string[] = [];
+  if (options.uppercase) {
+    pool += UPPERCASE;
+    charsets.push(UPPERCASE);
+  }
+  if (options.lowercase) {
+    pool += LOWERCASE;
+    charsets.push(LOWERCASE);
+  }
+  if (options.numbers) {
+    pool += NUMBERS;
+    charsets.push(NUMBERS);
+  }
+  if (options.symbols) {
+    pool += SYMBOLS;
+    charsets.push(SYMBOLS);
+  }
+  return { pool, charsets };
+}
+
+/**
+ * Pick a single random character from a character set using rejection sampling.
+ *
+ * @param charset - The character set to pick from
+ * @returns A single random character
+ */
+function pickRandomChar(charset: string): string {
+  const len = charset.length;
+  const limit = 256 - (256 % len);
+
+  for (;;) {
+    const randomBytes = new Uint8Array(2);
+    getRandomValues(randomBytes);
+    for (let i = 0; i < randomBytes.length; i++) {
+      if (randomBytes[i] < limit) {
+        return charset[randomBytes[i] % len];
+      }
+    }
+  }
+}
+
+/**
+ * Fisher-Yates shuffle using crypto-secure randomness.
+ *
+ * Shuffles the array in place using `crypto.getRandomValues()` to ensure
+ * uniform distribution of permutations.
+ *
+ * @param arr - The array to shuffle in place
+ */
+function cryptoShuffle(arr: string[]): void {
+  for (let i = arr.length - 1; i > 0; i--) {
+    // Generate a uniform random index in [0, i]
+    // Use rejection sampling to avoid modulo bias
+    const range = i + 1;
+    const limit = 256 - (256 % range);
+
+    let j: number;
+    for (;;) {
+      const randomBytes = new Uint8Array(1);
+      getRandomValues(randomBytes);
+      if (randomBytes[0] < limit) {
+        j = randomBytes[0] % range;
+        break;
+      }
+    }
+
+    // Swap
+    const tmp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = tmp;
+  }
 }
 
 /**
@@ -93,11 +169,20 @@ function buildPool(options: Required<GenerateOptions>): string {
  * value is >= `limit` (the largest multiple of `poolLength` that fits in a byte)
  * is discarded and re-sampled.
  *
+ * When `charsets` is provided (ensure mode), one character from each charset is
+ * placed first, then the remaining slots are filled from the full pool, and
+ * finally the entire array is Fisher-Yates shuffled to prevent positional prediction.
+ *
  * @param length - Desired password length
  * @param pool - Character pool to sample from
+ * @param charsets - Individual active charsets for ensure mode (optional)
  * @returns A single password string
  */
-function generateSingle(length: number, pool: string): string {
+function generateSingle(
+  length: number,
+  pool: string,
+  charsets?: string[]
+): string {
   const poolLength = pool.length;
 
   // Calculate the rejection threshold to eliminate modulo bias.
@@ -107,6 +192,14 @@ function generateSingle(length: number, pool: string): string {
 
   const chars: string[] = [];
 
+  // Ensure mode: pick one mandatory character from each active charset
+  if (charsets) {
+    for (const charset of charsets) {
+      chars.push(pickRandomChar(charset));
+    }
+  }
+
+  // Fill remaining characters from the full pool
   while (chars.length < length) {
     // Request enough random bytes to likely fill the remaining characters,
     // with extra to account for rejections.
@@ -122,6 +215,11 @@ function generateSingle(length: number, pool: string): string {
         chars.push(pool[byte % poolLength]);
       }
     }
+  }
+
+  // Ensure mode: shuffle to prevent positional prediction of mandatory chars
+  if (charsets) {
+    cryptoShuffle(chars);
   }
 
   return chars.join('');
@@ -156,6 +254,20 @@ function validateOptions(options: Required<GenerateOptions>): void {
   ) {
     throw new Error('최소 1개 이상의 문자셋을 포함해야 합니다');
   }
+
+  // Ensure mode: length must be >= number of active charsets
+  if (options.ensure) {
+    const activeCount =
+      (options.uppercase ? 1 : 0) +
+      (options.lowercase ? 1 : 0) +
+      (options.numbers ? 1 : 0) +
+      (options.symbols ? 1 : 0);
+    if (options.length < activeCount) {
+      throw new Error(
+        `ensure 모드에서는 길이가 활성 문자셋 수(${activeCount}) 이상이어야 합니다`
+      );
+    }
+  }
 }
 
 /**
@@ -188,16 +300,23 @@ export function generatePassword(options?: GenerateOptions): string[] {
     lowercase: options?.lowercase ?? true,
     numbers: options?.numbers ?? true,
     symbols: options?.symbols ?? true,
+    ensure: options?.ensure ?? false,
   };
 
   // Validate options (REQ-2, REQ-3, REQ-5)
   validateOptions(resolved);
 
-  const pool = buildPool(resolved);
+  const { pool, charsets } = buildPool(resolved);
 
   const passwords: string[] = [];
   for (let i = 0; i < resolved.count; i++) {
-    passwords.push(generateSingle(resolved.length, pool));
+    passwords.push(
+      generateSingle(
+        resolved.length,
+        pool,
+        resolved.ensure ? charsets : undefined
+      )
+    );
   }
 
   return passwords;
