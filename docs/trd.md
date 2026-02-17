@@ -1,4 +1,6 @@
-# TRD: randpw - 기술 요구사항 정의서
+# TRD: randpw - 기술 요구사항 정의서 (축소본)
+
+> 이 문서는 compacts에 의해 축소되었습니다. 원본: [docs/archive/trd-m0-m3.md](archive/trd-m0-m3.md)
 
 ## MVP 캡슐
 
@@ -17,7 +19,7 @@
 
 ---
 
-## 1. Architecture Overview
+## Architecture Overview
 
 ### 1.1 모듈 구조
 
@@ -78,7 +80,7 @@ randpw/
 
 > **근거**: D-03 (commander 선택), D-07 (stateless - DB 없음)
 
-## 2. NFR (비기능 요구사항)
+## NFR (비기능 요구사항)
 
 | ID | 카테고리 | 요구사항 | 측정 기준 | 근거 |
 |----|----------|----------|-----------|------|
@@ -90,166 +92,7 @@ randpw/
 | NFR-6 | 접근성 | 명확한 에러 메시지, 종료코드 표준 준수 | 수동 검증 | - |
 | NFR-7 | 빌드 | CJS/ESM 듀얼 출력 | tsup 빌드 결과물 검증 | D-04 |
 
-## 3. Data Lifecycle
-
-이 프로젝트는 **완전한 stateless** 아키텍처를 채택한다 (D-07).
-
-| 단계 | 설명 |
-|------|------|
-| 수집 | 사용자 입력은 CLI 인자로만 수집 (메모리 내) |
-| 처리 | `crypto.getRandomValues()`로 랜덤 바이트 생성 → 문자셋 매핑 |
-| 출력 | stdout으로 패스워드 출력 |
-| 보관 | **없음** - 패스워드는 프로세스 메모리에서 즉시 해제 |
-| 삭제 | 프로세스 종료 시 자동 해제 (GC) |
-| 익명화 | 해당 없음 (PII 수집하지 않음) |
-
-> **보안 참고**: 생성된 패스워드는 프로세스 메모리에만 존재하며, stdout 출력 후 별도 저장하지 않는다. 파이프(`|`)를 통한 전달은 사용자의 책임이다.
-
-## 4. AuthN/AuthZ 모델
-
-해당 없음. 이 프로젝트는 인증/인가가 필요 없는 로컬 CLI 도구이다.
-
-- 파일 시스템 접근: 없음
-- 네트워크 접근: 없음
-- 권한 모델: OS 레벨 사용자 권한으로만 동작
-
-## 5. Integrations & API Contracts
-
-### 5.1 CLI Interface (Public API)
-
-```
-randpw [options]
-
-Options:
-  -l, --length <number>   패스워드 길이 (기본: 16, 범위: 1-1024)
-  -c, --count <number>    생성 개수 (기본: 1)
-  --no-uppercase          대문자(A-Z) 제외
-  --no-lowercase          소문자(a-z) 제외
-  --no-numbers            숫자(0-9) 제외
-  --no-symbols            특수문자 제외
-  -V, --version           버전 표시
-  -h, --help              도움말
-```
-
-**종료 코드**:
-| 코드 | 의미 |
-|------|------|
-| 0 | 성공 |
-| 1 | 에러 (잘못된 옵션, 검증 실패 등) |
-
-### 5.2 Library API (Programmatic)
-
-```typescript
-// src/index.ts에서 export
-interface GenerateOptions {
-  length?: number;       // 기본: 16
-  count?: number;        // 기본: 1
-  uppercase?: boolean;   // 기본: true
-  lowercase?: boolean;   // 기본: true
-  numbers?: boolean;     // 기본: true
-  symbols?: boolean;     // 기본: true
-}
-
-function generatePassword(options?: GenerateOptions): string[];
-```
-
-**에러 케이스**:
-| 조건 | 에러 메시지 |
-|------|------------|
-| 모든 문자셋 제외 | "최소 1개 이상의 문자셋을 포함해야 합니다" |
-| 길이 범위 초과 | "길이는 1~1024 사이여야 합니다" |
-| count가 1 미만 | "count는 1 이상이어야 합니다" |
-| 유효하지 않은 숫자 | "유효한 숫자를 입력해주세요" |
-
-## 6. Stack Options & 비교
-
-> **근거**: D-02 (Node.js + TypeScript), D-03 (commander), D-04 (tsup), D-05 (vitest)
-
-### 6.1 언어/런타임 (D-02)
-
-| 옵션 | 장점 | 단점 | 선택 |
-|------|------|------|------|
-| **Node.js + TypeScript** | 빠른 개발, CLI 생태계 풍부, 타입 안전 | 런타임 의존성 (Node.js 필요) | **선택** |
-| Go | 단일 바이너리, 빠른 실행 | CLI 생태계 상대적 부족, 빌드 복잡 | 대안 |
-| Rust | 최고 성능, 단일 바이너리 | 학습 곡선, 개발 속도 느림 | 대안 |
-| Python | 간단한 문법 | 성능, 배포 복잡 | 대안 |
-
-### 6.2 CLI 파서 (D-03)
-
-| 옵션 | 장점 | 단점 | 선택 |
-|------|------|------|------|
-| **commander** | 가장 표준적, 문서 풍부, 자동 help | 약간의 boilerplate | **선택** |
-| yargs | 풍부한 기능 | 번들 크기 큼 | 대안 |
-| meow | 미니멀 | 기능 제한적 | 대안 |
-
-### 6.3 빌드 도구 (D-04)
-
-| 옵션 | 장점 | 단점 | 선택 |
-|------|------|------|------|
-| **tsup** | 제로설정, CJS/ESM 동시 출력 | esbuild 의존 | **선택** |
-| tsc | 표준, 추가 의존성 없음 | 번들링 미지원 | 대안 |
-| esbuild | 빠른 빌드 | 설정 필요 | 대안 |
-
-### 6.4 테스트 (D-05)
-
-| 옵션 | 장점 | 단점 | 선택 |
-|------|------|------|------|
-| **vitest** | 빠름, TypeScript 네이티브, Vite 호환 | 상대적 신규 | **선택** |
-| jest | 성숙한 생태계 | TS 설정 복잡 | 대안 |
-| node:test | 내장, 의존성 없음 | 기능 제한적 | 대안 |
-
-### Lock-in / Cost / Ops 비교
-
-| 항목 | 현재 선택 | Lock-in 수준 | 비용 | 운영 복잡도 |
-|------|----------|-------------|------|------------|
-| Node.js + TS | 낮음 (오픈소스 표준) | 무료 | 낮음 |
-| commander | 낮음 (쉽게 교체 가능) | 무료 | 낮음 |
-| tsup | 낮음 (tsc로 대체 가능) | 무료 | 낮음 |
-| npm publish | 낮음 (표준 레지스트리) | 무료 | 낮음 |
-
-## 7. Threat Modeling (STRIDE)
-
-| 위협 | 카테고리 | 설명 | 위험도 | 완화 |
-|------|----------|------|--------|------|
-| 예측 가능한 랜덤 | Tampering | Math.random() 사용 시 패턴 예측 가능 | 치명적 | CSPRNG(`crypto.getRandomValues`) 강제, ESLint 규칙 (RISK-1) |
-| 의존성 공급망 공격 | Tampering | commander 패키지 변조 | 중간 | package-lock.json 고정, npm audit 정기 실행 |
-| stdout 도청 | Information Disclosure | 터미널 출력이 로그에 기록될 수 있음 | 낮음 | 사용자 안내 (README에 보안 가이드) |
-| 인자 인젝션 | Spoofing | 셸 확장을 통한 악의적 인자 | 매우 낮음 | commander의 파싱이 자동 방어 |
-| DoS (과도한 길이) | Denial of Service | length=999999로 메모리 과다 사용 | 낮음 | 길이 상한 1024 제한 (REQ-3) |
-
-## 8. 레포/모듈 구조 및 브랜치 전략
-
-### 8.1 레포 구조
-
-```
-randpw/
-├── src/                    # 소스 코드
-│   ├── cli.ts              # CLI 엔트리포인트
-│   ├── generator.ts        # 핵심 로직
-│   └── index.ts            # 라이브러리 export
-├── tests/                  # 테스트
-│   ├── generator.test.ts   # 단위 테스트
-│   └── cli.test.ts         # 통합 테스트
-├── dist/                   # 빌드 출력 (gitignore)
-├── package.json
-├── tsconfig.json
-├── tsup.config.ts
-├── vitest.config.ts
-├── .eslintrc.json
-├── .prettierrc
-├── .gitignore
-└── LICENSE
-```
-
-### 8.2 브랜치 전략
-
-**main only** (D-01 단순 프로젝트)
-
-- 모든 커밋은 main 브랜치에 직접 푸시
-- 시맨틱 버저닝 사용 (0.x.x → 1.0.0)
-- npm publish는 main에서 수동 실행 또는 CI 자동화
-
-### 8.3 Coding Convention
+## Coding Convention
 
 | 항목 | 규칙 |
 |------|------|
@@ -261,16 +104,17 @@ randpw/
 | 에러 처리 | 예외 throw 대신 명시적 에러 반환 선호 |
 | 주석 | JSDoc 형식, public API에 필수 |
 
-## 9. 접근성 요구사항
+## Decision Log
 
-CLI 도구의 접근성은 다음을 포함한다:
-
-| 항목 | 요구사항 |
-|------|----------|
-| 에러 메시지 | stderr로 출력, 명확한 한국어/영어 메시지 |
-| 종료 코드 | 표준 Unix 관례 (0=성공, 1=에러) |
-| 도움말 | `--help` 옵션으로 모든 사용법 표시 |
-| 출력 형식 | 파이프 친화적 (줄바꿈 구분, 불필요한 장식 없음) |
-| 색상 | stdout에 ANSI 색상 코드 미사용 (파이프 호환) |
-
-> **참고**: 추가 레퍼런스 문서가 제공되지 않았으므로, 일반 모범사례 기반으로 작성하였습니다.
+| ID | 결정 | 근거 |
+|----|------|------|
+| D-01 | 프로젝트명 randpw, 단순하고 실용적 | 외부 API 불필요 |
+| D-02 | Node.js + TypeScript (strict) | 빠른 개발, CLI 생태계, 타입 안전 |
+| D-03 | commander (CLI 파서) | 가장 표준적, 문서 풍부 |
+| D-04 | tsup (빌드 도구) | 제로설정, CJS/ESM 동시 출력 |
+| D-05 | vitest (테스트) | 빠름, TypeScript 네이티브 |
+| D-06 | 패스워드 강도 표시 → v2 보류 | MVP 스콥 제한 |
+| D-07 | stateless 아키텍처 | DB 불필요, 단순성 |
+| D-08 | 클립보드 자동 복사 → v2 보류 | MVP 스콥 제한 |
+| D-09 | npm publish 배포 | 접근성 최고, npx 즉시 실행 |
+| D-10 | MIT 라이선스 | 오픈소스 표준 |
