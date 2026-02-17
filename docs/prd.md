@@ -11,17 +11,16 @@
 5. **FEAT-1**: 옵션별 패스워드 생성 (길이, 문자종류, 개수 지정)
 6. **노스스타 지표**: npm 주간 다운로드 수
 7. **입력 지표**: (1) GitHub 스타 수, (2) CLI 실행 성공률 (에러율 < 0.1%)
-8. **Non-goals**: (1) GUI/웹 인터페이스, (2) 패스워드 저장/관리, (3) 클라우드 동기화
+8. **Non-goals**: (1) 패스워드 저장/관리, (2) 클라우드 동기화
 9. **NFR Top 2**: (1) crypto.getRandomValues 기반 보안 랜덤 (NFR-1), (2) 응답 시간 < 50ms (NFR-2)
 10. **데이터 민감도**: PII 없음, 상태 저장 없음, 생성된 패스워드는 stdout으로만 출력 후 보관하지 않음
-11. **Top 리스크**: Math.random() 사용 시 예측 가능한 패스워드 생성 → 완화: node:crypto 모듈 강제 사용, lint 규칙으로 Math.random 금지
+11. **Top 리스크**: Math.random() 사용 시 예측 가능한 패스워드 생성 → 완화: Web Crypto API (crypto.getRandomValues()) 강제 사용, lint 규칙으로 Math.random 금지
 12. **다음 7일 액션**: MVP 구현 → 테스트 → npm publish
 
 ---
 
 ## Non-goals
 
-- GUI/웹 인터페이스 구축
 - 패스워드 저장/관리 기능 (패스워드 매니저 영역)
 - 클라우드 동기화 또는 원격 저장
 - 클립보드 자동 복사 (v2에서 고려, D-08)
@@ -45,6 +44,6 @@
 
 ## Risks & Assumptions 요약
 
-- **RISK-1**: Math.random() 사용 시 예측 가능한 패스워드 생성 → node:crypto 강제, ESLint 규칙으로 완화
+- **RISK-1**: Math.random() 사용 시 예측 가능한 패스워드 생성 → Web Crypto API 강제, ESLint 규칙으로 완화
 - **RISK-2**: 모든 문자셋 제외 시 생성 불가 → 입력 검증으로 차단, 명확한 에러 메시지 제공
-- **가정**: Node.js 18+ 환경 설치, CLI 사용에 익숙한 사용자, npm 레지스트리를 통한 배포가 접근성 최고
+- **가정**: Node.js 20+ 또는 Web Crypto API 지원 브라우저, CLI 사용에 익숙한 사용자, npm 레지스트리를 통한 배포가 접근성 최고

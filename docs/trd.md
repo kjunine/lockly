@@ -11,10 +11,10 @@
 5. **FEAT-1**: 옵션별 패스워드 생성 (길이, 문자종류, 개수 지정)
 6. **노스스타 지표**: npm 주간 다운로드 수
 7. **입력 지표**: (1) GitHub 스타 수, (2) CLI 실행 성공률 (에러율 < 0.1%)
-8. **Non-goals**: (1) GUI/웹 인터페이스, (2) 패스워드 저장/관리, (3) 클라우드 동기화
+8. **Non-goals**: (1) 패스워드 저장/관리, (2) 클라우드 동기화
 9. **NFR Top 2**: (1) crypto.getRandomValues 기반 보안 랜덤 (NFR-1), (2) 응답 시간 < 50ms (NFR-2)
 10. **데이터 민감도**: PII 없음, 상태 저장 없음, 생성된 패스워드는 stdout으로만 출력 후 보관하지 않음
-11. **Top 리스크**: Math.random() 사용 시 예측 가능한 패스워드 생성 → 완화: node:crypto 모듈 강제 사용, lint 규칙으로 Math.random 금지
+11. **Top 리스크**: Math.random() 사용 시 예측 가능한 패스워드 생성 → 완화: Web Crypto API 강제 사용, lint 규칙으로 Math.random 금지
 12. **다음 7일 액션**: MVP 구현 → 테스트 → npm publish
 
 ---
@@ -58,7 +58,7 @@ lockly/
         │  파싱된 옵션 객체 (GenerateOptions)
         ▼
    ┌──────────────┐
-   │ generator.ts │ ◄─── node:crypto.getRandomValues()
+   │ generator.ts │ ◄─── crypto.getRandomValues() (Web Crypto API)
    └──────────────┘
         │
         │  생성된 패스워드 문자열 배열
@@ -75,7 +75,7 @@ lockly/
 | 모듈 | 의존하는 대상 | 역할 |
 |------|-------------|------|
 | `cli.ts` | `commander`, `generator.ts` | CLI 파싱 + 생성 호출 |
-| `generator.ts` | `node:crypto` (내장) | 암호학적 랜덤 생성 |
+| `generator.ts` | Web Crypto API (내장) | 암호학적 랜덤 생성 |
 | `index.ts` | `generator.ts` | 라이브러리 export |
 
 > **근거**: D-03 (commander 선택), D-07 (stateless - DB 없음)
@@ -86,7 +86,7 @@ lockly/
 |----|----------|----------|-----------|------|
 | NFR-1 | 보안 | `crypto.getRandomValues()` 기반 CSPRNG 사용 | 코드 리뷰, ESLint 규칙 | RISK-1 |
 | NFR-2 | 성능 | 패스워드 생성 응답 시간 50ms 이내 | 벤치마크 테스트 (길이 16, 개수 1) | D-06 |
-| NFR-3 | 호환성 | Node.js 18+ LTS 지원 | CI에서 Node 18/20/22 테스트 | D-02 |
+| NFR-3 | 호환성 | Node.js 20+ 및 Web Crypto API 지원 브라우저 | CI에서 Node 20/22 테스트 | D-02 |
 | NFR-4 | 크로스플랫폼 | Linux/macOS/Windows 동작 | 각 OS에서 수동 테스트 또는 CI matrix | D-08 |
 | NFR-5 | 코드 품질 | 테스트 커버리지 90% 이상 | vitest coverage 리포트 | D-05 |
 | NFR-6 | 접근성 | 명확한 에러 메시지, 종료코드 표준 준수 | 수동 검증 | - |
