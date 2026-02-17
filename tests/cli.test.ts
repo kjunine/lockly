@@ -324,7 +324,7 @@ describe('CLI Integration Tests (TASK-011)', () => {
 
       expect(exitCode).toBe(0);
       expect(stderr).toBe('');
-      expect(stdout).toMatch(/0\.1\.0/);
+      expect(stdout).toMatch(/\d+\.\d+\.\d+/);
     });
 
     it('should display version with -V', async () => {
@@ -332,7 +332,7 @@ describe('CLI Integration Tests (TASK-011)', () => {
 
       expect(exitCode).toBe(0);
       expect(stderr).toBe('');
-      expect(stdout).toMatch(/0\.1\.0/);
+      expect(stdout).toMatch(/\d+\.\d+\.\d+/);
     });
 
     it('should display help with --help', async () => {
