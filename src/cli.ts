@@ -34,6 +34,7 @@ program
   .option('--no-lowercase', '소문자(a-z) 제외')
   .option('--no-numbers', '숫자(0-9) 제외')
   .option('--no-symbols', '특수문자 제외')
+  .option('--ensure', '각 문자셋에서 최소 1자 포함 보장')
   .helpOption('-h, --help', '도움말');
 
 program.parse();
@@ -45,6 +46,7 @@ const options = program.opts<{
   lowercase: boolean;
   numbers: boolean;
   symbols: boolean;
+  ensure: boolean;
 }>();
 
 // Parse numeric options
@@ -54,40 +56,35 @@ const count = parseInt(options.count, 10);
 // Validate numeric parsing
 if (isNaN(length)) {
   console.error('유효한 숫자를 입력해주세요 (length)');
-  process.exit(1);
-}
-
-if (isNaN(count)) {
+  process.exitCode = 1;
+} else if (isNaN(count)) {
   console.error('유효한 숫자를 입력해주세요 (count)');
-  process.exit(1);
-}
+  process.exitCode = 1;
+} else {
+  try {
+    // Generate passwords
+    const passwords = generatePassword({
+      length,
+      count,
+      uppercase: options.uppercase,
+      lowercase: options.lowercase,
+      numbers: options.numbers,
+      symbols: options.symbols,
+      ensure: options.ensure,
+    });
 
-try {
-  // Generate passwords
-  const passwords = generatePassword({
-    length,
-    count,
-    uppercase: options.uppercase,
-    lowercase: options.lowercase,
-    numbers: options.numbers,
-    symbols: options.symbols,
-  });
+    // Output to stdout (one password per line)
+    for (const password of passwords) {
+      console.log(password);
+    }
+  } catch (error) {
+    // Output error to stderr
+    if (error instanceof Error) {
+      console.error(error.message);
+    } else {
+      console.error('알 수 없는 에러가 발생했습니다');
+    }
 
-  // Output to stdout (one password per line)
-  for (const password of passwords) {
-    console.log(password);
+    process.exitCode = 1;
   }
-
-  // Success exit
-  process.exit(0);
-} catch (error) {
-  // Output error to stderr
-  if (error instanceof Error) {
-    console.error(error.message);
-  } else {
-    console.error('알 수 없는 에러가 발생했습니다');
-  }
-
-  // Error exit
-  process.exit(1);
 }
