@@ -1,5 +1,5 @@
 /**
- * Public API exports for randpw library
+ * Public API exports for lockly library
  */
 
 export type { GenerateOptions } from './generator.js';

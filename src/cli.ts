@@ -1,5 +1,5 @@
 /**
- * CLI entrypoint for randpw
+ * CLI entrypoint for lockly
  * Parses command-line arguments and generates passwords
  */
 
@@ -21,7 +21,7 @@ const version = packageJson.version;
 const program = new Command();
 
 program
-  .name('randpw')
+  .name('lockly')
   .description('Cryptographically secure random password generator')
   .version(version, '-V, --version', '버전 표시')
   .option(
