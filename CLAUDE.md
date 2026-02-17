@@ -48,7 +48,7 @@ pnpm run check        # 전체 검사 (lint + format + test + build)
 
 ## 핵심 규칙
 
-- 패스워드 생성은 반드시 `node:crypto` 모듈만 사용 (RISK-1)
+- 패스워드 생성은 반드시 Web Crypto API (`crypto.getRandomValues()`)만 사용 (RISK-1)
 - 길이 범위: 1~1024 (REQ-3)
 - 최소 1개 문자셋 필수 (REQ-2)
 - 상태 저장 없음 (stateless)
