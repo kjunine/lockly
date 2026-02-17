@@ -1,6 +1,6 @@
 {
   "name": "lockly",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "Cryptographically secure random password generator CLI",
   "license": "MIT",
   "type": "module",
