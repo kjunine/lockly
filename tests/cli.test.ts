@@ -341,7 +341,7 @@ describe('CLI Integration Tests (TASK-011)', () => {
       expect(exitCode).toBe(0);
       expect(stderr).toBe('');
       expect(stdout).toContain('Usage:');
-      expect(stdout).toContain('randpw');
+      expect(stdout).toContain('lockly');
       expect(stdout).toContain('Options:');
       expect(stdout).toContain('-l, --length');
       expect(stdout).toContain('-c, --count');
@@ -359,7 +359,7 @@ describe('CLI Integration Tests (TASK-011)', () => {
       expect(exitCode).toBe(0);
       expect(stderr).toBe('');
       expect(stdout).toContain('Usage:');
-      expect(stdout).toContain('randpw');
+      expect(stdout).toContain('lockly');
     });
   });
 
