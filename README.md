@@ -9,7 +9,7 @@ Generates unpredictable random passwords instantly using the Web Crypto API (`cr
 - **Cryptographically secure** — CSPRNG via Web Crypto API
 - **Browser compatible** — works in Node.js and browsers
 - **Fast** — under 50ms response time
-- **Customizable** — length, character sets, count
+- **Customizable** — length, character sets, count, charset inclusion guarantee (`--ensure`)
 - **Pipe-friendly** — clean stdout output, no ANSI colors
 - **Zero install** — run instantly with `npx`
 
@@ -53,6 +53,16 @@ lockly --no-uppercase --no-lowercase --no-symbols -l 6
 lockly --no-lowercase --no-symbols
 ```
 
+### Ensure charset inclusion
+
+```bash
+# Guarantee at least one character from each active charset
+lockly --ensure
+
+# Short password with guaranteed diversity
+lockly --ensure -l 4
+```
+
 ### Piping
 
 ```bash
@@ -82,6 +92,7 @@ export DB_PASSWORD=$(lockly -l 24 --no-symbols)
 | `--no-lowercase` | Exclude lowercase (a-z) | included | - |
 | `--no-numbers` | Exclude digits (0-9) | included | - |
 | `--no-symbols` | Exclude symbols | included | - |
+| `--ensure` | Guarantee at least one char from each active charset | off | - |
 | `-V, --version` | Show version | - | - |
 | `-h, --help` | Show help | - | - |
 
@@ -117,6 +128,12 @@ const customPasswords = generatePassword({
   lowercase: true,
   numbers: true,
   symbols: false
+});
+
+// Ensure at least one character from each active charset
+const ensured = generatePassword({
+  length: 16,
+  ensure: true
 });
 ```
 

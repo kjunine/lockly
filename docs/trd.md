@@ -66,8 +66,8 @@ lockly/
    [stdout 출력]
 ```
 
-- **cli.ts**: 사용자 입력을 파싱하고 검증한 후 generator 모듈을 호출한다. 에러 시 stderr로 메시지를 출력하고 종료코드 1을 반환한다.
-- **generator.ts**: 순수 함수로 구현된 패스워드 생성 로직. CLI 의존성 없이 독립적으로 사용 가능하다.
+- **cli.ts**: 사용자 입력을 파싱하고 검증한 후 generator 모듈을 호출한다. 에러 시 stderr로 메시지를 출력하고 `process.exitCode = 1`로 종료코드를 설정한다 (stdout flush 보장을 위해 `process.exit()` 대신 사용).
+- **generator.ts**: 순수 함수로 구현된 패스워드 생성 로직. CLI 의존성 없이 독립적으로 사용 가능하다. `--ensure` 모드에서는 각 활성 문자셋에서 최소 1자를 강제 포함하고 Fisher-Yates 셔플로 위치 예측을 방지한다.
 - **index.ts**: generator의 public API를 re-export하여 라이브러리로도 사용 가능하게 한다.
 
 ### 1.3 의존성 관계
@@ -118,3 +118,5 @@ lockly/
 | D-08 | 클립보드 자동 복사 → v2 보류 | MVP 스콥 제한 |
 | D-09 | npm publish 배포 | 접근성 최고, npx 즉시 실행 |
 | D-10 | MIT 라이선스 | 오픈소스 표준 |
+| D-11 | `--ensure` 옵션으로 문자셋 포함 강제 | 짧은 패스워드에서도 각 문자셋 최소 1자 보장, Fisher-Yates 셔플로 위치 예측 방지 |
+| D-12 | `process.exit()` → `process.exitCode` 전환 | stdout flush 보장으로 파이프 출력 신뢰성 향상 |
