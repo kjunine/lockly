@@ -2,11 +2,12 @@
 
 Cryptographically secure password generator CLI.
 
-Generates unpredictable random passwords instantly using `node:crypto.getRandomValues()`.
+Generates unpredictable random passwords instantly using the Web Crypto API (`crypto.getRandomValues()`).
 
 ## Features
 
-- **Cryptographically secure** — CSPRNG via `node:crypto`
+- **Cryptographically secure** — CSPRNG via Web Crypto API
+- **Browser compatible** — works in Node.js and browsers
 - **Fast** — under 50ms response time
 - **Customizable** — length, character sets, count
 - **Pipe-friendly** — clean stdout output, no ANSI colors
@@ -86,7 +87,7 @@ export DB_PASSWORD=$(lockly -l 24 --no-symbols)
 
 ## Security
 
-- **CSPRNG**: Uses `node:crypto.getRandomValues()` instead of `Math.random()`
+- **CSPRNG**: Uses `crypto.getRandomValues()` (Web Crypto API) instead of `Math.random()`
 - **Local execution**: No network requests — passwords are generated locally
 - **Stateless**: Generated passwords are never stored
 - **No modulo bias**: Rejection sampling ensures uniform distribution
@@ -121,7 +122,7 @@ const customPasswords = generatePassword({
 
 ## Requirements
 
-- Node.js 20+
+- Node.js 20+ or any modern browser with Web Crypto API support
 
 ## License
 
