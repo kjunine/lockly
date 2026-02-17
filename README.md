@@ -1,4 +1,4 @@
-# randpw
+# lockly
 
 암호학적으로 안전한 CLI 패스워드 생성기.
 
@@ -16,10 +16,10 @@
 
 ```bash
 # npx로 즉시 사용 (설치 불필요, 권장)
-npx randpw
+npx lockly
 
 # 또는 글로벌 설치
-npm install -g randpw
+npm install -g lockly
 ```
 
 ## 사용법
@@ -28,47 +28,47 @@ npm install -g randpw
 
 ```bash
 # 기본: 16자 패스워드 생성
-randpw
+lockly
 
 # 길이 지정 (32자)
-randpw -l 32
-randpw --length 32
+lockly -l 32
+lockly --length 32
 
 # 여러 개 생성 (5개)
-randpw -c 5
-randpw --count 5
+lockly -c 5
+lockly --count 5
 ```
 
 ### 문자셋 필터링
 
 ```bash
 # 특수문자 제외
-randpw --no-symbols
+lockly --no-symbols
 
 # 숫자만으로 생성 (PIN 번호)
-randpw --no-uppercase --no-lowercase --no-symbols -l 6
+lockly --no-uppercase --no-lowercase --no-symbols -l 6
 
 # 대문자와 숫자만 사용
-randpw --no-lowercase --no-symbols
+lockly --no-lowercase --no-symbols
 ```
 
 ### 파이프 활용
 
 ```bash
 # 클립보드로 복사 (macOS)
-randpw | pbcopy
+lockly | pbcopy
 
 # 클립보드로 복사 (Linux)
-randpw | xclip -selection clipboard
+lockly | xclip -selection clipboard
 
 # 클립보드로 복사 (Windows PowerShell)
-randpw | Set-Clipboard
+lockly | Set-Clipboard
 
 # 파일로 저장
-randpw -c 10 -l 32 > passwords.txt
+lockly -c 10 -l 32 > passwords.txt
 
 # 환경변수로 설정
-export DB_PASSWORD=$(randpw -l 24 --no-symbols)
+export DB_PASSWORD=$(lockly -l 24 --no-symbols)
 ```
 
 ## 옵션
@@ -102,7 +102,7 @@ export DB_PASSWORD=$(randpw -l 24 --no-symbols)
 TypeScript/JavaScript 프로젝트에서 라이브러리로도 사용할 수 있습니다.
 
 ```typescript
-import { generatePassword } from 'randpw';
+import { generatePassword } from 'lockly';
 
 // 기본 사용
 const passwords = generatePassword();
