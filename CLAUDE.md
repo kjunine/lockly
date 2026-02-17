@@ -7,7 +7,7 @@
 ## 기술 스택
 
 - **언어**: TypeScript (strict mode)
-- **런타임**: Node.js 18+
+- **런타임**: Node.js 20+
 - **CLI 파서**: commander
 - **빌드**: tsup (CJS/ESM 듀얼 출력)
 - **테스트**: vitest (커버리지 90%+)
@@ -28,12 +28,13 @@ tests/
 ## 빌드 및 실행
 
 ```bash
-npm install          # 의존성 설치
-npm run build        # 빌드 (dist/ 출력)
-npm run lint         # ESLint 검사
-npm run format:check # Prettier 검사
-npm test             # 테스트 실행
-npm run test:coverage # 커버리지 리포트
+pnpm install          # 의존성 설치
+pnpm run build        # 빌드 (dist/ 출력)
+pnpm run lint         # ESLint 검사
+pnpm run format:check # Prettier 검사
+pnpm test             # 테스트 실행
+pnpm run test:coverage # 커버리지 리포트
+pnpm run check        # 전체 검사 (lint + format + test + build)
 ```
 
 ## 코딩 컨벤션
