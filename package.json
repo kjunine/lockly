@@ -1,10 +1,10 @@
 {
-  "name": "randpw",
+  "name": "lockly",
   "version": "0.1.0",
   "description": "Cryptographically secure random password generator CLI",
   "license": "MIT",
   "type": "module",
-  "author": "",
+  "author": "Daniel Kyojun Ku <d@nielku.com>",
   "keywords": [
     "password",
     "generator",
@@ -15,14 +15,14 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/randpw.git"
+    "url": "https://github.com/kjunine/lockly.git"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/randpw/issues"
+    "url": "https://github.com/kjunine/lockly/issues"
   },
-  "homepage": "https://github.com/yourusername/randpw#readme",
+  "homepage": "https://github.com/kjunine/lockly#readme",
   "bin": {
-    "randpw": "./dist/cli.js"
+    "lockly": "./dist/cli.js"
   },
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
