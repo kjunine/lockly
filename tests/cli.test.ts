@@ -428,6 +428,90 @@ describe('CLI Integration Tests (TASK-011)', () => {
     });
   });
 
+  describe('문자셋 포함 강제 --ensure', () => {
+    it('should ensure all charsets present with --ensure', async () => {
+      // Run multiple times to verify consistency
+      for (let i = 0; i < 10; i++) {
+        const { stdout, stderr, exitCode } = await runCLI([
+          '--ensure',
+          '-l',
+          '4',
+        ]);
+
+        expect(exitCode).toBe(0);
+        expect(stderr).toBe('');
+
+        const password = stdout.trim();
+        expect(password).toHaveLength(4);
+        expect(password).toMatch(/[A-Z]/);
+        expect(password).toMatch(/[a-z]/);
+        expect(password).toMatch(/[0-9]/);
+        expect(password).toMatch(/[!@#$%^&*()_+\-=[\]{}|;:,.<>?]/);
+      }
+    });
+
+    it('should ensure charsets with filtered options and --ensure', async () => {
+      const { stdout, stderr, exitCode } = await runCLI([
+        '--ensure',
+        '-l',
+        '4',
+        '--no-symbols',
+      ]);
+
+      expect(exitCode).toBe(0);
+      expect(stderr).toBe('');
+
+      const password = stdout.trim();
+      expect(password).toHaveLength(4);
+      expect(password).toMatch(/[A-Z]/);
+      expect(password).toMatch(/[a-z]/);
+      expect(password).toMatch(/[0-9]/);
+    });
+
+    it('should return error when length < active charsets with --ensure', async () => {
+      const { stdout, stderr, exitCode } = await runCLI([
+        '--ensure',
+        '-l',
+        '2',
+      ]);
+
+      expect(exitCode).toBe(1);
+      expect(stderr).toContain('ensure 모드에서는 길이가 활성 문자셋 수');
+      expect(stdout).toBe('');
+    });
+
+    it('should work with --ensure and --count', async () => {
+      const { stdout, stderr, exitCode } = await runCLI([
+        '--ensure',
+        '-l',
+        '8',
+        '-c',
+        '3',
+      ]);
+
+      expect(exitCode).toBe(0);
+      expect(stderr).toBe('');
+
+      const lines = stdout.trim().split('\n');
+      expect(lines).toHaveLength(3);
+
+      for (const pw of lines) {
+        expect(pw).toHaveLength(8);
+        expect(pw).toMatch(/[A-Z]/);
+        expect(pw).toMatch(/[a-z]/);
+        expect(pw).toMatch(/[0-9]/);
+        expect(pw).toMatch(/[!@#$%^&*()_+\-=[\]{}|;:,.<>?]/);
+      }
+    });
+
+    it('should show --ensure in help output', async () => {
+      const { stdout, exitCode } = await runCLI(['--help']);
+
+      expect(exitCode).toBe(0);
+      expect(stdout).toContain('--ensure');
+    });
+  });
+
   describe('출력 형식 검증 (REQ-4)', () => {
     it('should output one password per line', async () => {
       const { stdout, exitCode } = await runCLI(['-c', '5']);

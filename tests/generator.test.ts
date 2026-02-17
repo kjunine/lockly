@@ -363,6 +363,116 @@ describe('generator', () => {
     });
   });
 
+  describe('문자셋 포함 강제 - ensure 모드', () => {
+    it('should ensure at least one char from each active charset (all 4)', () => {
+      // length=4, 모든 문자셋 → 각 문자셋에서 최소 1자
+      for (let trial = 0; trial < 50; trial++) {
+        const [pw] = generatePassword({
+          length: 4,
+          ensure: true,
+          uppercase: true,
+          lowercase: true,
+          numbers: true,
+          symbols: true,
+        });
+        expect(pw).toHaveLength(4);
+        expect(pw).toMatch(/[A-Z]/);
+        expect(pw).toMatch(/[a-z]/);
+        expect(pw).toMatch(/[0-9]/);
+        expect(pw).toMatch(/[!@#$%^&*()_+\-=[\]{}|;:,.<>?]/);
+      }
+    });
+
+    it('should ensure at least one char from each active charset (2 charsets)', () => {
+      for (let trial = 0; trial < 50; trial++) {
+        const [pw] = generatePassword({
+          length: 4,
+          ensure: true,
+          uppercase: true,
+          lowercase: false,
+          numbers: true,
+          symbols: false,
+        });
+        expect(pw).toHaveLength(4);
+        expect(pw).toMatch(/[A-Z]/);
+        expect(pw).toMatch(/[0-9]/);
+      }
+    });
+
+    it('should work with longer passwords in ensure mode', () => {
+      const [pw] = generatePassword({
+        length: 32,
+        ensure: true,
+      });
+      expect(pw).toHaveLength(32);
+      expect(pw).toMatch(/[A-Z]/);
+      expect(pw).toMatch(/[a-z]/);
+      expect(pw).toMatch(/[0-9]/);
+      expect(pw).toMatch(/[!@#$%^&*()_+\-=[\]{}|;:,.<>?]/);
+    });
+
+    it('should generate multiple passwords with ensure mode', () => {
+      const passwords = generatePassword({
+        length: 8,
+        count: 10,
+        ensure: true,
+      });
+      expect(passwords).toHaveLength(10);
+      for (const pw of passwords) {
+        expect(pw).toHaveLength(8);
+        expect(pw).toMatch(/[A-Z]/);
+        expect(pw).toMatch(/[a-z]/);
+        expect(pw).toMatch(/[0-9]/);
+        expect(pw).toMatch(/[!@#$%^&*()_+\-=[\]{}|;:,.<>?]/);
+      }
+    });
+
+    it('should throw error when length < active charset count in ensure mode', () => {
+      expect(() =>
+        generatePassword({
+          length: 2,
+          ensure: true,
+          uppercase: true,
+          lowercase: true,
+          numbers: true,
+          symbols: true,
+        })
+      ).toThrow('ensure 모드에서는 길이가 활성 문자셋 수(4) 이상이어야 합니다');
+    });
+
+    it('should throw error when length=1 with 2 charsets in ensure mode', () => {
+      expect(() =>
+        generatePassword({
+          length: 1,
+          ensure: true,
+          uppercase: true,
+          lowercase: false,
+          numbers: true,
+          symbols: false,
+        })
+      ).toThrow('ensure 모드에서는 길이가 활성 문자셋 수(2) 이상이어야 합니다');
+    });
+
+    it('should not enforce ensure when ensure is false (default)', () => {
+      // With ensure=false, a short password with all charsets should not throw
+      const [pw] = generatePassword({ length: 1 });
+      expect(pw).toHaveLength(1);
+    });
+
+    it('should work with single charset in ensure mode', () => {
+      const [pw] = generatePassword({
+        length: 1,
+        ensure: true,
+        uppercase: true,
+        lowercase: false,
+        numbers: false,
+        symbols: false,
+      });
+      expect(pw).toHaveLength(1);
+      expect(pw).toMatch(/^[A-Z]$/);
+    });
+  });
+
   describe('암호학적 보안성 (TASK-009: REQ-1)', () => {
     it('should use crypto.getRandomValues (no Math.random)', () => {
       // This is verified by code inspection and ESLint rules
