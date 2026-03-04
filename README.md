@@ -9,7 +9,7 @@ Generates unpredictable random passwords instantly using the Web Crypto API (`cr
 - **Cryptographically secure** — CSPRNG via Web Crypto API
 - **Browser compatible** — works in Node.js and browsers
 - **Fast** — under 50ms response time
-- **Customizable** — length, character sets, count, charset inclusion guarantee (`--ensure`)
+- **Customizable** — length, character sets, count, charset inclusion guarantee (`--ensure`), URL-safe mode (`--url-safe`)
 - **Pipe-friendly** — clean stdout output, no ANSI colors
 - **Zero install** — run instantly with `npx`
 
@@ -63,6 +63,19 @@ lockly --ensure
 lockly --ensure -l 4
 ```
 
+### URL-safe passwords
+
+```bash
+# Use URL-safe symbols (-._~) instead of default special characters
+lockly --url-safe
+
+# Combine with other options
+lockly --url-safe --ensure -l 24
+
+# Alphanumeric only (no symbols at all)
+lockly --url-safe --no-symbols
+```
+
 ### Piping
 
 ```bash
@@ -92,6 +105,7 @@ export DB_PASSWORD=$(lockly -l 24 --no-symbols)
 | `--no-lowercase` | Exclude lowercase (a-z) | included | - |
 | `--no-numbers` | Exclude digits (0-9) | included | - |
 | `--no-symbols` | Exclude symbols | included | - |
+| `--url-safe` | Use URL-safe symbols only (`-._~`) | off | - |
 | `--ensure` | Guarantee at least one char from each active charset | off | - |
 | `-V, --version` | Show version | - | - |
 | `-h, --help` | Show help | - | - |
@@ -134,6 +148,12 @@ const customPasswords = generatePassword({
 const ensured = generatePassword({
   length: 16,
   ensure: true
+});
+
+// URL-safe password (symbols replaced with -._~)
+const urlSafe = generatePassword({
+  length: 24,
+  urlSafe: true
 });
 ```
 
