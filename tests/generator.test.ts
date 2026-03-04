@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { generatePassword } from '../src/generator';
+import { generatePassword, URL_SAFE_SYMBOLS } from '../src/generator';
 
 describe('generator', () => {
   it('placeholder test - should pass', () => {
@@ -470,6 +470,96 @@ describe('generator', () => {
       });
       expect(pw).toHaveLength(1);
       expect(pw).toMatch(/^[A-Z]$/);
+    });
+  });
+
+  describe('URL-safe 모드', () => {
+    it('URL_SAFE_SYMBOLS 상수가 RFC 3986 unreserved 비영숫자 문자와 일치', () => {
+      expect(URL_SAFE_SYMBOLS).toBe('-._~');
+    });
+
+    it('urlSafe: true일 때 URL-safe 문자만 포함', () => {
+      for (let trial = 0; trial < 20; trial++) {
+        const [pw] = generatePassword({ length: 50, urlSafe: true });
+        expect(pw).toHaveLength(50);
+        // 영문, 숫자, -._~ 만 허용
+        expect(pw).toMatch(/^[A-Za-z0-9._~-]+$/);
+      }
+    });
+
+    it('urlSafe: true일 때 기존 SYMBOLS 문자가 포함되지 않음', () => {
+      const passwords = generatePassword({
+        length: 100,
+        count: 10,
+        urlSafe: true,
+      });
+      const combined = passwords.join('');
+      expect(combined).not.toMatch(/[!@#$%^&*()+=[\]{}|;:,<>?]/);
+    });
+
+    it('urlSafe: true, symbols: false 조합 시 영숫자만 포함', () => {
+      for (let trial = 0; trial < 20; trial++) {
+        const [pw] = generatePassword({
+          length: 30,
+          urlSafe: true,
+          symbols: false,
+        });
+        expect(pw).toHaveLength(30);
+        expect(pw).toMatch(/^[A-Za-z0-9]+$/);
+      }
+    });
+
+    it('urlSafe: true, ensure: true 조합 시 각 문자셋에서 최소 1자 포함', () => {
+      for (let trial = 0; trial < 50; trial++) {
+        const [pw] = generatePassword({
+          length: 4,
+          urlSafe: true,
+          ensure: true,
+        });
+        expect(pw).toHaveLength(4);
+        expect(pw).toMatch(/[A-Z]/);
+        expect(pw).toMatch(/[a-z]/);
+        expect(pw).toMatch(/[0-9]/);
+        expect(pw).toMatch(/[._~-]/);
+      }
+    });
+
+    it('urlSafe: true, ensure: true, length: 4 경계값 테스트', () => {
+      for (let trial = 0; trial < 30; trial++) {
+        const [pw] = generatePassword({
+          length: 4,
+          urlSafe: true,
+          ensure: true,
+          uppercase: true,
+          lowercase: true,
+          numbers: true,
+          symbols: true,
+        });
+        expect(pw).toHaveLength(4);
+        expect(pw).toMatch(/^[A-Za-z0-9._~-]+$/);
+        expect(pw).toMatch(/[A-Z]/);
+        expect(pw).toMatch(/[a-z]/);
+        expect(pw).toMatch(/[0-9]/);
+        expect(pw).toMatch(/[._~-]/);
+      }
+    });
+
+    it('urlSafe 미지정 시 기존 동작과 동일 (하위 호환)', () => {
+      // urlSafe를 지정하지 않으면 기존 SYMBOLS 사용
+      const passwords = generatePassword({ length: 100, count: 10 });
+      const combined = passwords.join('');
+      // 기존 특수문자가 통계적으로 포함되어야 함
+      expect(combined).toMatch(/[!@#$%^&*()_+\-=[\]{}|;:,.<>?]/);
+    });
+
+    it('urlSafe: false 명시 시 기존 동작과 동일', () => {
+      const passwords = generatePassword({
+        length: 100,
+        count: 10,
+        urlSafe: false,
+      });
+      const combined = passwords.join('');
+      expect(combined).toMatch(/[!@#$%^&*()_+\-=[\]{}|;:,.<>?]/);
     });
   });
 

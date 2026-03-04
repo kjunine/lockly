@@ -512,6 +512,77 @@ describe('CLI Integration Tests (TASK-011)', () => {
     });
   });
 
+  describe('URL-safe 모드 --url-safe', () => {
+    it('should generate URL-safe password with --url-safe', async () => {
+      for (let i = 0; i < 5; i++) {
+        const { stdout, stderr, exitCode } = await runCLI([
+          '--url-safe',
+          '-l',
+          '50',
+        ]);
+
+        expect(exitCode).toBe(0);
+        expect(stderr).toBe('');
+
+        const password = stdout.trim();
+        expect(password).toHaveLength(50);
+        expect(password).toMatch(/^[A-Za-z0-9._~-]+$/);
+      }
+    });
+
+    it('should not contain default symbols with --url-safe', async () => {
+      const { stdout, exitCode } = await runCLI(['--url-safe', '-l', '100']);
+
+      expect(exitCode).toBe(0);
+      const password = stdout.trim();
+      expect(password).not.toMatch(/[!@#$%^&*()+=[\]{}|;:,<>?]/);
+    });
+
+    it('should generate alphanumeric only with --url-safe --no-symbols', async () => {
+      const { stdout, stderr, exitCode } = await runCLI([
+        '--url-safe',
+        '--no-symbols',
+        '-l',
+        '50',
+      ]);
+
+      expect(exitCode).toBe(0);
+      expect(stderr).toBe('');
+
+      const password = stdout.trim();
+      expect(password).toHaveLength(50);
+      expect(password).toMatch(/^[A-Za-z0-9]+$/);
+    });
+
+    it('should work with --url-safe --ensure', async () => {
+      for (let i = 0; i < 10; i++) {
+        const { stdout, stderr, exitCode } = await runCLI([
+          '--url-safe',
+          '--ensure',
+          '-l',
+          '4',
+        ]);
+
+        expect(exitCode).toBe(0);
+        expect(stderr).toBe('');
+
+        const password = stdout.trim();
+        expect(password).toHaveLength(4);
+        expect(password).toMatch(/[A-Z]/);
+        expect(password).toMatch(/[a-z]/);
+        expect(password).toMatch(/[0-9]/);
+        expect(password).toMatch(/[._~-]/);
+      }
+    });
+
+    it('should show --url-safe in help output', async () => {
+      const { stdout, exitCode } = await runCLI(['--help']);
+
+      expect(exitCode).toBe(0);
+      expect(stdout).toContain('--url-safe');
+    });
+  });
+
   describe('출력 형식 검증 (REQ-4)', () => {
     it('should output one password per line', async () => {
       const { stdout, exitCode } = await runCLI(['-c', '5']);
