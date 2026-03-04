@@ -35,6 +35,7 @@ program
   .option('--no-numbers', '숫자(0-9) 제외')
   .option('--no-symbols', '특수문자 제외')
   .option('--ensure', '각 문자셋에서 최소 1자 포함 보장')
+  .option('--url-safe', 'URL 안전 특수문자(-._~)만 사용')
   .helpOption('-h, --help', '도움말');
 
 program.parse();
@@ -47,6 +48,7 @@ const options = program.opts<{
   numbers: boolean;
   symbols: boolean;
   ensure: boolean;
+  urlSafe: boolean;
 }>();
 
 // Parse numeric options
@@ -71,6 +73,7 @@ if (isNaN(length)) {
       numbers: options.numbers,
       symbols: options.symbols,
       ensure: options.ensure,
+      urlSafe: options.urlSafe,
     });
 
     // Output to stdout (one password per line)

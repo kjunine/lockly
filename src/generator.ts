@@ -53,6 +53,14 @@ export interface GenerateOptions {
    * @default false
    */
   ensure?: boolean;
+
+  /**
+   * Use URL-safe symbols (-._~) instead of the default special characters.
+   * Only affects the symbols charset; other charsets are unchanged.
+   * Based on RFC 3986 Section 2.3 unreserved characters (non-alphanumeric).
+   * @default false
+   */
+  urlSafe?: boolean;
 }
 
 /**
@@ -74,6 +82,11 @@ export const NUMBERS = '0123456789';
  * Special character set
  */
 export const SYMBOLS = '!@#$%^&*()_+-=[]{}|;:,.<>?';
+
+/**
+ * URL-safe special character set (RFC 3986 Section 2.3 unreserved non-alphanumeric)
+ */
+export const URL_SAFE_SYMBOLS = '-._~';
 
 /**
  * Build a character pool string and collect individual active charsets.
@@ -102,8 +115,9 @@ function buildPool(options: Required<GenerateOptions>): {
     charsets.push(NUMBERS);
   }
   if (options.symbols) {
-    pool += SYMBOLS;
-    charsets.push(SYMBOLS);
+    const sym = options.urlSafe ? URL_SAFE_SYMBOLS : SYMBOLS;
+    pool += sym;
+    charsets.push(sym);
   }
   return { pool, charsets };
 }
@@ -301,6 +315,7 @@ export function generatePassword(options?: GenerateOptions): string[] {
     numbers: options?.numbers ?? true,
     symbols: options?.symbols ?? true,
     ensure: options?.ensure ?? false,
+    urlSafe: options?.urlSafe ?? false,
   };
 
   // Validate options (REQ-2, REQ-3, REQ-5)
